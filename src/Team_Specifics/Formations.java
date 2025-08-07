@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Formations {
-    FOUR_THREE_THREE("4-3-3", 4, 3, 3, List.of(
+    FOUR_THREE_THREE("4-3-3", 1, 2, 2, 1, 2, 2,  List.of(
             PlayerPositions.GK,
             PlayerPositions.RB,
             PlayerPositions.CB,
@@ -17,7 +17,7 @@ public enum Formations {
             PlayerPositions.ST,
             PlayerPositions.LW
     )),
-    FOUR_FOUR_TWO("4-4-2", 4, 2, 4, List.of(
+    FOUR_FOUR_TWO("4-4-2", 2, 2, 4, 0, 2, 0, List.of(
             PlayerPositions.GK,
             PlayerPositions.RB,
             PlayerPositions.CB,
@@ -30,7 +30,7 @@ public enum Formations {
             PlayerPositions.ST,
             PlayerPositions.ST
     )),
-    FOUR_TWO_THREE_ONE("4-2-3-1", 4, 2, 4, List.of(
+    FOUR_TWO_THREE_ONE("4-2-3-1", 1, 2, 1, 2, 2, 2, List.of(
             PlayerPositions.GK,
             PlayerPositions.LB,
             PlayerPositions.CB,
@@ -43,7 +43,7 @@ public enum Formations {
             PlayerPositions.RW,
             PlayerPositions.ST
     )),
-    THREE_FIVE_TWO("3-5-2", 3, 5, 2, List.of(
+    THREE_FIVE_TWO("3-5-2", 2, 3, 4 , 1, 0, 0, List.of(
             PlayerPositions.GK,
             PlayerPositions.CB,
             PlayerPositions.CB,
@@ -56,7 +56,7 @@ public enum Formations {
             PlayerPositions.ST,
             PlayerPositions.ST
     )),
-    THREE_FOUR_THREE("3-4-3", 3, 4, 3, List.of(PlayerPositions.GK,
+    THREE_FOUR_THREE("3-4-3", 1, 2, 2, 1, 2, 2, List.of(PlayerPositions.GK,
             PlayerPositions.RB,
             PlayerPositions.CB,
             PlayerPositions.CB,
@@ -69,16 +69,22 @@ public enum Formations {
             PlayerPositions.RW));
 
     private final String formation;
-    private final int defenders;
-    private final int midfielders;
-    private final int attackers;
+    private final int strikers;
+    private final int centralDefenders;
+    private final int attackingMidfielders;
+    private final int defensiveMidfielders;
+    private final int wingbackDefender;
+    private final int winger;
     private final List<PlayerPositions> positions;
 
-    Formations(String formation, int defenders, int midfielders, int attackers, List<PlayerPositions> positions) {
+    Formations(String formation, int strikers, int centralDefenders, int attackingMidfielders, int defensiveMidfielders, int wingbackDefender, int wingers, List<PlayerPositions> positions) {
         this.formation = formation;
-        this.defenders = defenders;
-        this.midfielders = midfielders;
-        this.attackers = attackers;
+        this.strikers = strikers;
+        this.centralDefenders = centralDefenders;
+        this.attackingMidfielders = attackingMidfielders;
+        this.defensiveMidfielders = defensiveMidfielders;
+        this.wingbackDefender = wingbackDefender;
+        this.winger = wingers;
         this.positions = positions;
     }
 
@@ -86,16 +92,28 @@ public enum Formations {
         return this.formation;
     }
 
-    public int getDefenders() {
-        return defenders;
+    public int getStrikers() {
+        return this.strikers;
     }
 
-    public int getMidfielders() {
-        return midfielders;
+    public int getCentralDefenders() {
+        return this.centralDefenders;
     }
 
-    public int getAttackers() {
-        return attackers;
+    public int getAttackingMidfielders() {
+        return this.attackingMidfielders;
+    }
+
+    public int getDefensiveMidfielders() {
+        return this.defensiveMidfielders;
+    }
+
+    public int getWingback() {
+        return this.wingbackDefender;
+    }
+
+    public int getWingers() {
+        return this.winger;
     }
 
     public List<PlayerPositions> getPositions()

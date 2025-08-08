@@ -26,32 +26,23 @@ public class Team {
     }
 
     public void  assignXI() {
-        int strikers = this.formation.getStrikers();
-        int centralDefenders = this.formation.getCentralDefenders();
-        int attackingMidfielders = this.formation.getAttackingMidfielders();
-        int defensiveMidfielders = this.formation.getDefensiveMidfielders();
-        int wingbackDefender = this.formation.getWingback();
-        int wingers = this.formation.getWingers();
 
-        Map<PlayerPositions, Integer> squadMap = this.getSquadPerRole();
-
-        List<Player> goalies = getGoalkeepers();
-        List<Player> winger = getWingers();
-        List<Player> striker = getStrikers();
-        List<Player> attMid = getAttackingMids();
-        List<Player> defMid = getDefensiveMids();
-        List<Player> centerBacks = getCentralDefenders();
-        List<Player> wingbacks = getWingbacks();
-
-        if(goalies.isEmpty())
-            throw new TeamException("Goalkeepers absent from squad");
-        startingXI.addFirst(goalies.getFirst());
     }
 
-    public List<Player> getWingers() {
+    public List<Player> getRightWingers() {
         List<Player> winger = new ArrayList<Player>();
         for(Player p : squad) {
-            if(p.getPosition() == PlayerPositions.RW || p.getPosition() == PlayerPositions.LW)
+            if(p.getPosition() == PlayerPositions.RW)
+                winger.add(p);
+        }
+        winger.sort(new OvrComparator());
+        return winger;
+    }
+
+    public List<Player> getLeftWingers() {
+        List<Player> winger = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.LW)
                 winger.add(p);
         }
         winger.sort(new OvrComparator());
@@ -61,7 +52,17 @@ public class Team {
     public List<Player> getStrikers() {
         List<Player> striker = new ArrayList<Player>();
         for(Player p : squad) {
-            if(p.getPosition() == PlayerPositions.ST || p.getPosition() == PlayerPositions.CF)
+            if(p.getPosition() == PlayerPositions.ST)
+                striker.add(p);
+        }
+        striker.sort(new OvrComparator());
+        return striker;
+    }
+
+    public List<Player> getCentralForward() {
+        List<Player> striker = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.CF)
                 striker.add(p);
         }
         striker.sort(new OvrComparator());
@@ -71,7 +72,17 @@ public class Team {
     public List<Player> getAttackingMids() {
         List<Player> attMids = new ArrayList<Player>();
         for(Player p : squad) {
-            if(p.getPosition() == PlayerPositions.CM || p.getPosition() == PlayerPositions.CAM)
+            if(p.getPosition() == PlayerPositions.CAM)
+                attMids.add(p);
+        }
+        attMids.sort(new OvrComparator());
+        return attMids;
+    }
+
+    public List<Player> getMidfielders() {
+        List<Player> attMids = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.CM)
                 attMids.add(p);
         }
         attMids.sort(new OvrComparator());
@@ -88,6 +99,26 @@ public class Team {
         return defMids;
     }
 
+    public List<Player> getRightMidfielders()
+    {
+        List<Player> rightMids = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.RM)
+                rightMids.add(p);
+        }
+        return rightMids;
+    }
+
+    public List<Player> getLeftMidfielders()
+    {
+        List<Player> leftMids = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.LM)
+                leftMids.add(p);
+        }
+        return leftMids;
+    }
+
     public List<Player> getCentralDefenders() {
         List<Player> centralDefs = new ArrayList<Player>();
         for(Player p : squad) {
@@ -98,11 +129,40 @@ public class Team {
         return centralDefs;
     }
 
-    public List<Player> getWingbacks() {
+    public List<Player> getLeftWingbacks() {
         List<Player> wingbacks = new ArrayList<Player>();
         for(Player p : squad) {
-            if(p.getPosition() == PlayerPositions.LB || p.getPosition() == PlayerPositions.RB
-            || p.getPosition() == PlayerPositions.RWB || p.getPosition() == PlayerPositions.LWB)
+            if(p.getPosition() == PlayerPositions.LWB)
+                wingbacks.add(p);
+        }
+        wingbacks.sort(new OvrComparator());
+        return wingbacks;
+    }
+
+    public List<Player> getRightWingbacks() {
+        List<Player> wingbacks = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.RWB)
+                wingbacks.add(p);
+        }
+        wingbacks.sort(new OvrComparator());
+        return wingbacks;
+    }
+
+    public List<Player> getRightBacks() {
+        List<Player> wingbacks = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.RB)
+                wingbacks.add(p);
+        }
+        wingbacks.sort(new OvrComparator());
+        return wingbacks;
+    }
+
+    public List<Player> getLeftBacks() {
+        List<Player> wingbacks = new ArrayList<Player>();
+        for(Player p : squad) {
+            if(p.getPosition() == PlayerPositions.LB)
                 wingbacks.add(p);
         }
         wingbacks.sort(new OvrComparator());
@@ -115,61 +175,89 @@ public class Team {
             if(p.getPosition() == PlayerPositions.GK)
                 goalkeepers.add(p);
         }
+        goalkeepers.sort(new OvrComparator());
         return goalkeepers;
     }
 
-    public Map<PlayerPositions, Integer> getSquadPerRole() {
-        Map<PlayerPositions, Integer> squad = new HashMap<PlayerPositions, Integer>();
-
-        squad.put(PlayerPositions.GK, getGoalkeepers().size());
-        squad.put(PlayerPositions.CB, getCentralDefenders().size());
-        int st = 0;
-        int cf = 0;
-        int cam = 0;
-        int cdm = 0;
-        int lm = 0;
-        int rm = 0;
-        int cm = 0;
-        int lb = 0;
-        int rb = 0;
-        int lwb = 0;
-        int rwb = 0;
-        for(Player p : this.squad)
-        {
-            if(PlayerPositions.ST == p.getPosition())
-                st++;
-            else if(PlayerPositions.CF == p.getPosition())
-                cf++;
-            else if(PlayerPositions.CAM == p.getPosition())
-                cam++;
-            else if(PlayerPositions.LB == p.getPosition())
-                lb++;
-            else if(PlayerPositions.RB == p.getPosition())
-                rb++;
-            else if(PlayerPositions.LWB == p.getPosition())
-                lwb++;
-            else if(PlayerPositions.RWB == p.getPosition())
-                rwb++;
-            else if(PlayerPositions.CDM == p.getPosition())
-                cdm++;
-            else if(PlayerPositions.LM == p.getPosition())
-                lm++;
-            else if(PlayerPositions.RM == p.getPosition())
-                rm++;
-            else if(PlayerPositions.CM == p.getPosition())
-                cm++;
+    public Map<PlayerPositions, List<Player>> getMatchdaySquad() {
+        Map<PlayerPositions, List<Player>> matchdaySquad = new HashMap<PlayerPositions, List<Player>>();
+        List<PlayerPositions> formationReq = this.formation.getPositions();
+        for(PlayerPositions p : formationReq) {
+            if(matchdaySquad.containsKey(p))
+                continue;
+            matchdaySquad.put(p, new ArrayList<Player>());
         }
-        squad.put(PlayerPositions.ST, st);
-        squad.put(PlayerPositions.CF, cf);
-        squad.put(PlayerPositions.CAM, cam);
-        squad.put(PlayerPositions.LB, lb);
-        squad.put(PlayerPositions.RB, rb);
-        squad.put(PlayerPositions.LWB, lwb);
-        squad.put(PlayerPositions.RWB, rwb);
-        squad.put(PlayerPositions.CDM, cdm);
-        squad.put(PlayerPositions.LM, lm);
-        squad.put(PlayerPositions.RM, rm);
-        squad.put(PlayerPositions.CM, cm);
-        return squad;
+
+        List<Player> goalkeepers = getGoalkeepers();
+        List<Player> rightWingbacks = getRightWingbacks();
+        List<Player> attackingMids = getAttackingMids();
+        List<Player> defenderMids = getDefensiveMids();
+        List<Player> centralDefenders = getCentralDefenders();
+        List<Player> leftWingbacks = getLeftWingbacks();
+        List<Player> leftBacks = getLeftBacks();
+        List<Player> rightBacks = getRightBacks();
+        List<Player> rightMids = getRightMidfielders();
+        List<Player> leftMids = getLeftMidfielders();
+        List<Player> mids = getMidfielders();
+        List<Player> rightWinger = getRightWingers();
+        List<Player> leftWinger = getLeftWingers();
+        List<Player> centralForward = getCentralForward();
+        List<Player> strikers = getStrikers();
+
+        Map<PlayerPositions, Integer> count = new HashMap<PlayerPositions, Integer>();
+        count.put(PlayerPositions.GK, this.formation.getGoalkeeper());
+        count.put(PlayerPositions.LB, this.formation.getLeftBacks());
+        count.put(PlayerPositions.RB, this.formation.getRightBacks());
+        count.put(PlayerPositions.RWB, this.formation.getRightWingBack());
+        count.put(PlayerPositions.LWB, this.formation.getLeftWingBack());
+        count.put(PlayerPositions.CB, this.formation.getCentralDefenders());
+        count.put(PlayerPositions.CF, this.formation.getCentralForward());
+        count.put(PlayerPositions.LW, this.formation.getLeftWinger());
+        count.put(PlayerPositions.RW, this.formation.getRightWinger());
+        count.put(PlayerPositions.ST, this.formation.getStrikers());
+        count.put(PlayerPositions.CM, this.formation.getMidfielders());
+        count.put(PlayerPositions.CAM, this.formation.getAttackingMidfielders());
+        count.put(PlayerPositions.CDM, this.formation.getDefensiveMidfielders());
+        count.put(PlayerPositions.LM, this.formation.getLeftMidfielders());
+        count.put(PlayerPositions.RM, this.formation.getRightMidfielders());
+        for(PlayerPositions p : count.keySet())
+        {
+            int depth = 0;
+            while(count.get(p) != 0 && depth <= (count.get(p) + 1))
+            {
+                depth++;
+                if(p == PlayerPositions.GK)
+                    matchdaySquad.get(p).add(goalkeepers.removeFirst());
+                else if(p ==  PlayerPositions.LB)
+                    matchdaySquad.get(p).add(leftBacks.removeFirst());
+                else if(p ==   PlayerPositions.RB)
+                    matchdaySquad.get(p).add(rightBacks.removeFirst());
+                else if(p == PlayerPositions.RWB)
+                    matchdaySquad.get(p).add(rightWingbacks.removeFirst());
+                else if(p == PlayerPositions.LWB)
+                    matchdaySquad.get(p).add(leftWingbacks.removeFirst());
+                else if(p == PlayerPositions.RM)
+                    matchdaySquad.get(p).add(rightMids.removeFirst());
+                else if(p == PlayerPositions.CAM)
+                    matchdaySquad.get(p).add(attackingMids.removeFirst());
+                else if(p == PlayerPositions.CDM)
+                    matchdaySquad.get(p).add(defenderMids.removeFirst());
+                else if(p ==  PlayerPositions.LM)
+                    matchdaySquad.get(p).add(leftMids.removeFirst());
+                else if(p == PlayerPositions.CM)
+                    matchdaySquad.get(p).add(mids.removeFirst());
+                else if(p == PlayerPositions.CB)
+                    matchdaySquad.get(p).add(centralDefenders.removeFirst());
+                else if(p == PlayerPositions.CF)
+                    matchdaySquad.get(p).add(centralForward.removeFirst());
+                else if(p == PlayerPositions.LW)
+                    matchdaySquad.get(p).add(leftWinger.removeFirst());
+                else if(p == PlayerPositions.RW)
+                    matchdaySquad.get(p).add(rightWinger.removeFirst());
+                else if(p == PlayerPositions.ST)
+                    matchdaySquad.get(p).add(strikers.removeFirst());
+            }
+        }
+        return matchdaySquad;
     }
 }

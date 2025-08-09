@@ -21,13 +21,13 @@ public class Player {
 
     public Player(String name, TeamName team, PlayerPositions position, VectorTwoDim positionOnPitch, int shortPassing, int longPassing, int vision, int finishing, int defending) {
         setAttributes(shortPassing, longPassing, vision, finishing, defending);
-        calculateOvr();
         if(name.isEmpty())
             throw new PlayerException("Invalid Player Name");
         this.name = name;
         this.team = team;
         this.position = position;
         this.positionInPitch = positionOnPitch;
+        calculateOvr();
     }
 
     public void setAttributes(int shortPassing, int longPassing, int vision, int finishing, int defending) {
@@ -49,8 +49,17 @@ public class Player {
     }
 
     public void calculateOvr() {
-        this.ovr = (this.shortPassing + this.longPassing + this.defending + this.vision + this.finishing) / FIVE;
+        PlayerPositions pos = this.position;
+        double weighted =
+                this.shortPassing * pos.getShortPassWeight() +
+                        this.longPassing  * pos.getLongPassWeight() +
+                        this.vision       * pos.getVisionWeight() +
+                        this.finishing    * pos.getFinishingWeight() +
+                        this.defending    * pos.getDefendingWeight();
+
+        this.ovr = (int) Math.round(weighted);
     }
+
 
     public String getPlayerName() {
         return this.name;

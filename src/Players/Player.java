@@ -1,5 +1,7 @@
 package Players;
 
+import org.bson.Document;
+
 import Exceptions.PlayerException;
 import Team_Specifics.PlayerPositions;
 import Team_Specifics.TeamName;
@@ -8,9 +10,9 @@ import Utils.VectorTwoDim;
 public class Player {
     private static final int FIVE = 5;
 
-    private String name;
-    private TeamName team;
-    private PlayerPositions position;
+    private final String name;
+    private final TeamName team;
+    private final PlayerPositions position;
     private int pace;
     private int shooting;
     private int passing;
@@ -197,5 +199,26 @@ public class Player {
 
     public int getPositioning() {
         return positioning;
+    }
+
+    public Document toDocument()
+    {
+        Document doc = new Document();
+        doc.append("name", this.name);
+        doc.append("team", this.team.toString());
+        doc.append("position", this.position.toString());
+        doc.append("ovr", this.ovr);
+        doc.append("pace", this.pace);
+        doc.append("shooting", this.shooting);
+        doc.append("passing", this.passing);
+        doc.append("dribbling", this.dribbling);
+        doc.append("defending", this.defending);
+        doc.append("physicality", this.physicality);
+        doc.append("diving", this.diving);
+        doc.append("handling", this.handling);
+        doc.append("kicking", this.kicking);
+        doc.append("reflexes", this.reflexes);
+        doc.append("positioning", this.positioning);
+        return doc;
     }
 }

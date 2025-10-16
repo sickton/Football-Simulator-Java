@@ -2,7 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Python" name="Python">
-      <configuration sdkName="Python 3.14 (Football-Simulator-Java)" />
+      <configuration sdkName="Python 3.13 (Football Simulator)" />
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
@@ -42,6 +42,6 @@
     <orderEntry type="library" name="mongodb-driver-sync-5.6.0" level="project" />
     <orderEntry type="library" name="mongodb-driver-core-5.6.0" level="project" />
     <orderEntry type="library" name="bson-5.6.0" level="project" />
-    <orderEntry type="library" name="Python 3.14 (Football-Simulator-Java) interpreter library" level="application" />
+    <orderEntry type="library" name="Python 3.13 (Football Simulator) interpreter library" level="application" />
   </component>
 </module>

@@ -26,8 +26,9 @@ public class Player {
     private int reflexes;
     private int ovr;
     private VectorTwoDim positionInPitch;
+    private boolean isRetired;
 
-    public Player(String name, TeamName team, PlayerPositions position, VectorTwoDim positionOnPitch, int pace, int shooting, int passing, int dribbling, int defending, int physicality) {
+    public Player(String name, TeamName team, PlayerPositions position, VectorTwoDim positionOnPitch, int pace, int shooting, int passing, int dribbling, int defending, int physicality, boolean isRetired) {
         setAttributes(pace, shooting, passing, dribbling, defending, physicality);
         if(name.isEmpty())
             throw new PlayerException("Invalid Player Name");
@@ -35,6 +36,7 @@ public class Player {
         this.team = team;
         this.position = position;
         this.positionInPitch = positionOnPitch;
+        this.isRetired = isRetired;
         calculateOvr();
     }
 
@@ -133,6 +135,53 @@ public class Player {
         }
     }
 
+    public void setPace(int pace) {
+        this.pace = pace;
+    }
+
+    public void setShooting(int shooting) {
+        this.shooting = shooting;
+    }
+
+    public void setPassing(int passing) {
+        this.passing = passing;
+    }
+
+    public void setDribbling(int dribbling) {
+        this.dribbling = dribbling;
+    }
+
+    public void setDefending(int defending) {
+        this.defending = defending;
+    }
+
+    public void setPhysicality(int physicality) {
+        this.physicality = physicality;
+    }
+
+    public void setDiving(int diving) {
+        this.diving = diving;
+    }
+
+    public void setHandling(int handling) {
+        this.handling = handling;
+    }
+
+    public void setKicking(int kicking) {
+        this.kicking = kicking;
+    }
+
+    public void setPositioning(int positioning) {
+        this.positioning = positioning;
+    }
+
+    public void setReflexes(int reflexes) {
+        this.reflexes = reflexes;
+    }
+
+    public void setRetired(boolean retired) {
+        this.isRetired = retired;
+    }
 
     public String getPlayerName() {
         return this.name;
@@ -201,6 +250,9 @@ public class Player {
         return positioning;
     }
 
+    public boolean isRetired() {
+        return isRetired;
+    }
     public Document toDocument()
     {
         Document doc = new Document();
@@ -219,6 +271,7 @@ public class Player {
         doc.append("kicking", this.kicking);
         doc.append("reflexes", this.reflexes);
         doc.append("positioning", this.positioning);
+        doc.append("retired", this.isRetired);
         return doc;
     }
 }

@@ -7,12 +7,15 @@ import Team_Specifics.PlayerPositions;
 import Team_Specifics.TeamName;
 import Utils.VectorTwoDim;
 
+import java.util.Arrays;
+
 public class Player {
     private static final int FIVE = 5;
 
     private final String name;
     private final TeamName team;
     private final PlayerPositions position;
+    private final PlayerPositions[] secondaryPositions;
     private int pace;
     private int shooting;
     private int passing;
@@ -26,9 +29,9 @@ public class Player {
     private int reflexes;
     private int ovr;
     private VectorTwoDim positionInPitch;
-    private boolean isRetired;
 
-    public Player(String name, TeamName team, PlayerPositions position, VectorTwoDim positionOnPitch, int pace, int shooting, int passing, int dribbling, int defending, int physicality, boolean isRetired) {
+    public Player(String name, TeamName team, PlayerPositions position, VectorTwoDim positionOnPitch, int pace, int shooting, int passing, int dribbling, int defending, int physicality, PlayerPositions[] secondaryPositions) {
+        this.secondaryPositions = secondaryPositions;
         setAttributes(pace, shooting, passing, dribbling, defending, physicality);
         if(name.isEmpty())
             throw new PlayerException("Invalid Player Name");
@@ -36,12 +39,12 @@ public class Player {
         this.team = team;
         this.position = position;
         this.positionInPitch = positionOnPitch;
-        this.isRetired = isRetired;
         calculateOvr();
     }
 
-    public Player(String name, TeamName team, PlayerPositions position, VectorTwoDim positionOnPitch, int diving, int handling, int kicking, int positioning, int reflexes)
+    public Player(String name, TeamName team, PlayerPositions position, VectorTwoDim positionOnPitch, int diving, int handling, int kicking, int positioning, int reflexes, PlayerPositions[] secondaryPositions)
     {
+        this.secondaryPositions = secondaryPositions;
         setGoalieAttributes(diving, handling, kicking, positioning, reflexes);
         if(name.isEmpty())
             throw new PlayerException("Invalid Player Name");
@@ -179,10 +182,6 @@ public class Player {
         this.reflexes = reflexes;
     }
 
-    public void setRetired(boolean retired) {
-        this.isRetired = retired;
-    }
-
     public String getPlayerName() {
         return this.name;
     }
@@ -190,6 +189,7 @@ public class Player {
     public TeamName getTeam() {
         return this.team;
     }
+
     public PlayerPositions getPosition() {
         return this.position;
     }
@@ -250,9 +250,6 @@ public class Player {
         return positioning;
     }
 
-    public boolean isRetired() {
-        return isRetired;
-    }
     public Document toDocument()
     {
         Document doc = new Document();
@@ -271,7 +268,10 @@ public class Player {
         doc.append("kicking", this.kicking);
         doc.append("reflexes", this.reflexes);
         doc.append("positioning", this.positioning);
-        doc.append("retired", this.isRetired);
+        doc.append("secondaryPositions",
+                Arrays.stream(this.secondaryPositions)
+                        .map(Enum::toString)
+                        .toList());
         return doc;
     }
 }
